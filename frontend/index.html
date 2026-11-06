@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IndicReel — Automated Multilingual Dubbing & Voice-Cloning Studio</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Studio Header -->
+    <header class="studio-header">
+      <div class="header-brand">
+        <div class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+          </svg>
+        </div>
+        <div class="brand-titles">
+          <h1>IndicReel <span class="badge-version">v2.1</span></h1>
+          <p class="subtitle">AI Multilingual Dubber, Multi-Chunk STT & Zero-Shot Voice Cloning Studio</p>
+        </div>
+      </div>
+
+      <div class="header-telemetry">
+        <div class="status-indicator" id="engineStatusBadge">
+          <span class="status-dot"></span>
+          <span class="status-text" id="engineStatusText">Connecting...</span>
+        </div>
+        <div class="model-badge">
+          <span class="model-tag">PRISMA-v3.0</span>
+          <span class="model-separator">+</span>
+          <span class="model-tag">VACHANA-VC-v1</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main 2-Column Grid -->
+    <main class="studio-grid">
+      <!-- Left Column: Controls & Pipeline Stepper -->
+      <section class="studio-controls-column">
+        <!-- Card 1: Video Input & Dropzone -->
+        <div class="studio-card input-card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <span class="card-step-num">01</span>
+              <h2>Source Video Input</h2>
+            </div>
+            <div class="sample-btn-group">
+              <button type="button" class="btn-ghost-sample" id="loadSample45Btn" title="Test multi-chunk STT (45 seconds)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                45s Reel
+              </button>
+              <button type="button" class="btn-ghost-sample" id="loadSampleFullBtn" title="Test long-form dubbing (165s / 2.7 mins)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                Full Reel (165s)
+              </button>
+              <button type="button" class="btn-ghost-sample" id="loadSample16x9Btn" title="Test 16:9 YouTube Widescreen Video">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                  <polygon points="10 8 16 12 10 16 10 8"></polygon>
+                </svg>
+                YouTube 16:9
+              </button>
+              <button type="button" class="btn-ghost-sample" id="loadSampleStepperBtn" title="Test Stepper Motor Reel (video_1.mp4)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+                Stepper Motor
+              </button>
+            </div>
+          </div>
+
+          <div class="dropzone" id="videoDropzone">
+            <input type="file" id="videoFileInput" accept="video/mp4,video/quicktime,video/webm" hidden />
+            <div class="dropzone-content" id="dropzonePrompt">
+              <div class="upload-icon-circle">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="17 8 12 3 7 8"></polyline>
+                  <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+              </div>
+              <p class="dropzone-main-text">Drag & drop 9:16 vertical video here, or <span class="highlight">browse</span></p>
+              <p class="dropzone-sub-text">Supports .mp4, .mov (Supports 30–60s videos via multi-chunk STT)</p>
+            </div>
+
+            <div class="dropzone-selected-file hidden" id="dropzoneFileSelected">
+              <div class="file-icon-block">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                  <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                </svg>
+              </div>
+              <div class="file-info-block">
+                <span class="file-name" id="selectedFileName">video.mp4</span>
+                <span class="file-size" id="selectedFileSize">0 MB</span>
+              </div>
+              <button type="button" class="btn-remove-file" id="removeFileBtn" title="Remove file">&times;</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Video Trimming Controls (FFmpeg) -->
+        <div class="studio-card trim-card" id="trimCard">
+          <div class="card-header">
+            <div class="card-title-group">
+              <span class="card-step-num">02</span>
+              <h2>Video Trimming (FFmpeg Slice)</h2>
+            </div>
+            <span class="badge-sub-info" id="detectedDurationBadge">Duration: --s</span>
+          </div>
+
+          <div class="trim-controls-grid">
+            <div class="trim-input-group">
+              <label for="trimStartInput">Start Time (sec):</label>
+              <input type="number" id="trimStartInput" min="0" step="0.5" value="0" />
+            </div>
+            <div class="trim-input-group">
+              <label for="trimEndInput">End Time (sec):</label>
+              <input type="number" id="trimEndInput" min="1" step="0.5" placeholder="End of video" />
+            </div>
+          </div>
+
+          <div class="trim-presets">
+            <button type="button" class="btn-preset active" data-start="0" data-end="">Full Video</button>
+            <button type="button" class="btn-preset" data-start="0" data-end="28">First 28s</button>
+            <button type="button" class="btn-preset" data-start="0" data-end="45">First 45s</button>
+          </div>
+          <p class="trim-helper-text">FFmpeg will trim the video prior to audio extraction and dubbing.</p>
+        </div>
+
+        <!-- Card 3: Dual Language Selection (11 Languages) -->
+        <div class="studio-card language-card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <span class="card-step-num">03</span>
+              <h2>Dual Language Selectors</h2>
+            </div>
+            <button type="button" class="btn-ghost-sample" id="matchLanguagesBtn">Match Both</button>
+          </div>
+
+          <div class="dual-lang-grid">
+            <!-- Dubbing Language -->
+            <div class="lang-select-wrapper">
+              <label for="dubLangSelect" class="lang-select-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                </svg>
+                Target Dubbing Voice:
+              </label>
+              <select id="dubLangSelect" class="studio-select">
+                <option value="te-IN" selected>Telugu (తెలుగు) — te-IN</option>
+                <option value="hi-IN">Hindi (हिन्दी) — hi-IN</option>
+                <option value="ta-IN">Tamil (தமிழ்) — ta-IN</option>
+                <option value="kn-IN">Kannada (ಕನ್ನಡ) — kn-IN</option>
+                <option value="ml-IN">Malayalam (മലയാളം) — ml-IN</option>
+                <option value="bn-IN">Bengali (বাংলা) — bn-IN</option>
+                <option value="mr-IN">Marathi (मराठी) — mr-IN</option>
+                <option value="gu-IN">Gujarati (ગુજરાતી) — gu-IN</option>
+                <option value="or-IN">Odia (ଓଡ଼ିଆ) — or-IN</option>
+                <option value="pa-IN">Punjabi (ਪੰਜਾਬੀ) — pa-IN</option>
+                <option value="en-IN">Indian English (English) — en-IN</option>
+              </select>
+            </div>
+
+            <!-- Subtitle Language -->
+            <div class="lang-select-wrapper">
+              <label for="subLangSelect" class="lang-select-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                  <line x1="6" y1="15" x2="10" y2="15"></line>
+                  <line x1="14" y1="15" x2="18" y2="15"></line>
+                </svg>
+                Target Subtitle Captions:
+              </label>
+              <select id="subLangSelect" class="studio-select">
+                <option value="te-IN" selected>Telugu (తెలుగు) — te-IN</option>
+                <option value="hi-IN">Hindi (हिन्दी) — hi-IN</option>
+                <option value="ta-IN">Tamil (தமிழ்) — ta-IN</option>
+                <option value="kn-IN">Kannada (ಕನ್ನಡ) — kn-IN</option>
+                <option value="ml-IN">Malayalam (മലയാളം) — ml-IN</option>
+                <option value="bn-IN">Bengali (বাংলা) — bn-IN</option>
+                <option value="mr-IN">Marathi (मराठी) — mr-IN</option>
+                <option value="gu-IN">Gujarati (ગુજરાતી) — gu-IN</option>
+                <option value="or-IN">Odia (ଓଡ଼ିଆ) — or-IN</option>
+                <option value="pa-IN">Punjabi (ਪੰਜਾਬੀ) — pa-IN</option>
+                <option value="en-IN">Indian English (English) — en-IN</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4: Voice Generation Mode -->
+        <div class="studio-card voice-mode-card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <span class="card-step-num">04</span>
+              <h2>Voice Synthesis Mode</h2>
+            </div>
+            <span class="badge-sub-info">vachana-vc-v1</span>
+          </div>
+
+          <div class="voice-mode-tabs">
+            <label class="mode-tab active">
+              <input type="radio" name="voiceMode" value="clone_video" checked />
+              <div class="mode-tab-content">
+                <span class="mode-title">Clone Video Voice</span>
+                <span class="mode-desc">10s slice from reel</span>
+              </div>
+            </label>
+
+            <label class="mode-tab">
+              <input type="radio" name="voiceMode" value="saved_voice" />
+              <div class="mode-tab-content">
+                <span class="mode-title">Saved Voice Profile</span>
+                <span class="mode-desc">0-credit instant load</span>
+              </div>
+            </label>
+
+            <label class="mode-tab">
+              <input type="radio" name="voiceMode" value="clone_custom" />
+              <div class="mode-tab-content">
+                <span class="mode-title">Upload My Voice</span>
+                <span class="mode-desc">Custom .wav / .mp3 / .mpa</span>
+              </div>
+            </label>
+
+            <label class="mode-tab">
+              <input type="radio" name="voiceMode" value="stock_voice" />
+              <div class="mode-tab-content">
+                <span class="mode-title">Stock Studio Voice</span>
+                <span class="mode-desc">Standard Gnani voice</span>
+              </div>
+            </label>
+          </div>
+
+          <!-- Conditional Saved Voice Profile Picker -->
+          <div class="saved-voice-box hidden" id="savedVoiceArea" style="margin-top: 14px;">
+            <label for="savedVoiceSelect" style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 6px; font-weight: 500;">
+              Select Saved Voice Profile:
+            </label>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <select id="savedVoiceSelect" class="studio-select" style="flex: 1;">
+                <option value="" disabled selected>Loading saved profiles...</option>
+              </select>
+              <button type="button" id="deleteVoiceBtn" class="btn-danger-sm" title="Delete selected profile">Delete</button>
+            </div>
+            <p style="font-size: 11px; color: #10B981; margin-top: 6px; display: flex; align-items: center; gap: 4px;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              Loads embedding directly from storage (0 Gnani API credits used).
+            </p>
+          </div>
+
+          <!-- Conditional Custom Voice Upload Area -->
+          <div class="custom-voice-upload hidden" id="customVoiceUploadArea">
+            <label for="customVoiceInput" class="custom-voice-drop">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              </svg>
+              <span id="customVoiceLabelText">Choose custom reference voice (.wav, .mp3, or .mpa)</span>
+            </label>
+            <input type="file" id="customVoiceInput" accept="audio/wav,audio/mpeg,audio/mp3,audio/x-mpa,audio/mpa,.wav,.mp3,.mpa" hidden />
+            
+            <div style="margin-top: 8px;">
+              <input type="text" id="saveAsNameInput" class="studio-input" placeholder="Save this voice for future runs (optional, e.g., 'Rohith Primary')" style="width: 100%; padding: 8px 10px; background: var(--bg-input); border: 1px solid var(--border-subtle); border-radius: 6px; color: #fff; font-size: 12px;" />
+            </div>
+          </div>
+
+          <!-- Quick Register Voice Profile Section -->
+          <div class="register-voice-drawer" id="registerVoiceDrawer" style="margin-top: 14px; border-top: 1px dashed var(--border-subtle); padding-top: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-size: 12px; font-weight: 600; color: #C4C0FF; display: flex; align-items: center; gap: 5px;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                Register New Voice Profile
+              </span>
+              <button type="button" class="btn-ghost-sample" id="toggleRegisterVoiceBtn" style="padding: 2px 8px; font-size: 11px;">+ New Profile</button>
+            </div>
+
+            <div class="register-voice-form hidden" id="registerVoiceForm" style="display: flex; flex-direction: column; gap: 10px; background: rgba(255,255,255,0.02); padding: 12px; border-radius: 8px; border: 1px solid var(--border-subtle);">
+              <input type="text" id="newVoiceNameInput" class="studio-input" placeholder="Profile name (e.g., Rohith Primary)" style="width: 100%; padding: 8px 10px; background: var(--bg-input); border: 1px solid var(--border-subtle); border-radius: 6px; color: #fff; font-size: 12px;" />
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <input type="file" id="newVoiceFileInput" accept="audio/wav,audio/mpeg,audio/mp3,audio/x-mpa,audio/mpa,.wav,.mp3,.mpa" style="flex: 1; font-size: 11px; color: var(--text-muted);" />
+                <button type="button" id="saveNewVoiceBtn" class="btn-primary-dub" style="padding: 6px 12px; font-size: 12px; width: auto; min-width: 90px; height: auto;">
+                  Save Profile
+                </button>
+              </div>
+              <div id="registerVoiceStatus" style="font-size: 11px; color: #10B981; display: none;"></div>
+            </div>
+          </div>
+
+          <!-- Conditional Stock Studio Voice Picker -->
+          <div class="stock-voice-picker hidden" id="stockVoicePickerArea" style="margin-top: 10px;">
+            <label for="stockVoiceSelect" style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 6px; font-weight: 500;">
+              Select Pre-trained Timbre v2.5 Voice:
+            </label>
+            <select id="stockVoiceSelect" class="studio-select" style="width: 100%;">
+              <option value="Nalini" selected>Nalini (Female — Expressive Studio)</option>
+              <option value="Deepak">Deepak (Male — Clear & Deep)</option>
+              <option value="Madhuri">Madhuri (Female — Warm & Natural)</option>
+              <option value="Roopesh">Roopesh (Male — Authoritative)</option>
+              <option value="Radhika">Radhika (Female — Friendly)</option>
+              <option value="Vikrant">Vikrant (Male — Dynamic)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Card 5: Action & Pipeline Execution -->
+        <div class="studio-card action-card">
+          <button type="button" class="btn-primary-dub" id="startDubBtn">
+            <span class="btn-content">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              Generate Cloned Reel
+            </span>
+            <div class="btn-spinner hidden" id="btnSpinner"></div>
+          </button>
+
+          <!-- Pipeline Step Tracker -->
+          <div class="pipeline-tracker" id="pipelineTracker">
+            <div class="tracker-header">
+              <span class="tracker-title">Pipeline Execution Log</span>
+              <div class="tracker-telemetry-right">
+                <span class="cache-badge hidden" id="cacheHitBadge">● Cache Hit (0 Credits)</span>
+                <span class="tracker-time" id="executionTimer">00:00</span>
+              </div>
+            </div>
+
+            <!-- Live Progress Bar & Chunk Telemetry -->
+            <div class="progress-bar-container hidden" id="progressBarContainer" style="margin-bottom: 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 10px 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 6px;">
+                <span id="progressStatusLabel" style="color: var(--text-main); font-weight: 500;">Initializing pipeline...</span>
+                <span id="progressPercentLabel" style="color: #A5B4FC; font-weight: 700; font-family: 'JetBrains Mono', monospace;">0%</span>
+              </div>
+              <div style="background: rgba(255,255,255,0.08); border-radius: 999px; height: 7px; overflow: hidden; width: 100%;">
+                <div id="progressBarFill" style="background: linear-gradient(90deg, #6C62ED, #10B981); height: 100%; width: 0%; border-radius: 999px; transition: width 0.3s ease;"></div>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 11px;">
+                <span id="chunkBadgeLabel" style="color: #38BDF8; font-weight: 600; font-family: 'JetBrains Mono', monospace;"></span>
+                <span id="jobIdLabel" style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace;"></span>
+              </div>
+            </div>
+
+            <div class="step-list">
+              <div class="pipeline-step" data-step="1">
+                <div class="step-indicator"><span class="step-dot"></span></div>
+                <div class="step-text">Video Trimming & 10s Voice Reference Slice</div>
+              </div>
+              <div class="pipeline-step" data-step="2">
+                <div class="step-indicator"><span class="step-dot"></span></div>
+                <div class="step-text">Global Speaker Voice Embedding (Single Pass)</div>
+              </div>
+              <div class="pipeline-step" data-step="3">
+                <div class="step-indicator"><span class="step-dot"></span></div>
+                <div class="step-text">Silence-Aware Audio Chunking (VAD &le; 24s)</div>
+              </div>
+              <div class="pipeline-step" data-step="4">
+                <div class="step-indicator"><span class="step-dot"></span></div>
+                <div class="step-text">Chunk STT, Dual Translation & VC Synthesis</div>
+              </div>
+              <div class="pipeline-step" data-step="5">
+                <div class="step-indicator"><span class="step-dot"></span></div>
+                <div class="step-text">Tempo Alignment & Master Track Stitching</div>
+              </div>
+              <div class="pipeline-step" data-step="6">
+                <div class="step-indicator"><span class="step-dot"></span></div>
+                <div class="step-text">Global Dynamic Subtitles (3-5 words) & Remux</div>
+              </div>
+            </div>
+
+            <!-- Terminal-style Log Output -->
+            <div class="console-box" id="consoleBox">
+              <div class="console-line info">[System] IndicReel Studio v2.2 ready. Long-form video dubbing architecture active.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: Reel Studio Player & Telemetry -->
+      <section class="studio-player-column">
+        <!-- Viewport Mode Switcher (16:9 YouTube vs 9:16 Shorts/Reel) -->
+        <div class="viewport-switcher-bar">
+          <span class="switcher-label">Player Mode:</span>
+          <div class="switcher-buttons">
+            <button type="button" class="btn-viewport active" id="modeReelBtn">9:16 Vertical Reel</button>
+            <button type="button" class="btn-viewport" id="modeYouTubeBtn">16:9 YouTube Widescreen</button>
+          </div>
+        </div>
+
+        <!-- Adaptive Video Player Frame -->
+        <div class="device-frame-wrapper" id="playerFrameWrapper">
+          <div class="mobile-frame" id="studioPlayerFrame">
+            <div class="phone-speaker" id="phoneSpeaker"></div>
+            <div class="video-viewport" id="videoViewport">
+              <!-- Placeholder State -->
+              <div class="player-placeholder" id="playerPlaceholder">
+                <div class="placeholder-graphic">
+                  <div class="soundwave-bars">
+                    <span></span><span></span><span></span><span></span><span></span>
+                  </div>
+                </div>
+                <h3>Studio Player Idle</h3>
+                <p>Upload or load a sample video on the left (Supports 16:9 YouTube & 9:16 Reels), pick languages, and hit Generate!</p>
+              </div>
+
+              <!-- Active HTML5 Video Player -->
+              <video id="outputVideoPlayer" class="output-video hidden" controls playsinline></video>
+            </div>
+          </div>
+
+          <!-- Player Controls & Actions -->
+          <div class="player-actions hidden" id="playerActions">
+            <a id="downloadVideoBtn" class="btn-action-download" href="#" download>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              Download Dubbed Reel
+            </a>
+            <a id="openTabBtn" class="btn-action-secondary" href="#" target="_blank">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+              Open in Tab
+            </a>
+          </div>
+        </div>
+
+        <!-- Transcript Comparison Cards -->
+        <div class="transcripts-wrapper">
+          <div class="transcript-card">
+            <div class="transcript-header">
+              <span class="transcript-tag tag-source">Original English (Prisma STT)</span>
+              <button type="button" class="btn-copy" id="copySourceBtn" title="Copy text">Copy</button>
+            </div>
+            <p class="transcript-body" id="sourceTranscriptText">
+              Transcription will appear here once audio analysis completes.
+            </p>
+          </div>
+
+          <div class="transcript-card">
+            <div class="transcript-header">
+              <span class="transcript-tag tag-cloned" id="dubVoiceTag">Dub Voice (Telugu)</span>
+              <span class="audio-duration-badge" id="dubDurationBadge">0.0s</span>
+            </div>
+            <p class="transcript-body regional-script" id="dubbedTranscriptText">
+              Translated regional speech script will appear here.
+            </p>
+          </div>
+
+          <div class="transcript-card">
+            <div class="transcript-header">
+              <span class="transcript-tag tag-sub" id="subLanguageTag">Subtitles (Telugu)</span>
+            </div>
+            <p class="transcript-body regional-script" id="subTranscriptText">
+              Burned dynamic subtitle script will appear here.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

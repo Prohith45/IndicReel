@@ -1,0 +1,28 @@
+# Environment & Secrets
+.env
+*.env
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.venv/
+
+# Processing Cache & Large Media Files
+temp/
+backend/temp/
+backend/outputs/
+outputs/
+*.mp4
+*.wav
+*.mp3
+!samples/*.mp4
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
