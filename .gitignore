@@ -19,7 +19,7 @@ outputs/
 *.mp4
 *.wav
 *.mp3
-!samples/*.mp4
+!samples/sample_reel.mp4
 
 # IDE & OS
 .vscode/
